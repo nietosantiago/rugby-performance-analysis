@@ -1,0 +1,17 @@
+project:
+  name: Rugby Analysis AI
+
+data:
+  videos_folder: data/videos
+  output_folder: output
+
+metrics:
+  tackles: true
+  carries: true
+  rucks: true
+  lineouts: true
+  kicks: true
+
+dashboard:
+  enabled: true
+  heatmaps: true
