@@ -7,7 +7,9 @@ class Player:
     team: str
     tackles: int = 0
     carries: int = 0
+    meters_gained: float = 0.0
     rucks: int = 0
+    rucks_won: int = 0
     lineouts: int = 0
     kicks: int = 0
     
