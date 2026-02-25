@@ -1,0 +1,13 @@
+# Videos
+*.mp4
+*.mov
+*.avi
+
+data/videos/
+
+# Python
+__pycache__/
+*.pyc
+
+# Notebooks
+.ipynb_checkpoints/
