@@ -3,6 +3,7 @@ import config
 import os
 from models import Event
 
+
 class VideoProcessor:
     def __init__(self, video_path: str):
 
@@ -51,7 +52,7 @@ class VideoProcessor:
 
 
 def process_video(video_folder):
-    import os
+
     from player_detector import PlayerDetector
     from player_tracker import PlayerTracker
     from event_detector import EventDetector
@@ -61,20 +62,40 @@ def process_video(video_folder):
 
     detector = PlayerDetector()
 
+    # 🔥 CONFIGURACIÓN DE PERFORMANCE
+    TARGET_WIDTH = 960
+    TARGET_HEIGHT = 540
+
+    MAX_FRAMES_TEST = None   # 👉 poner 2000 para modo test rápido
+
     for file in os.listdir(video_folder):
         if file.endswith(".mp4"):
+
             print("Procesando:", file)
+
             video_path = os.path.join(video_folder, file)
             processor = VideoProcessor(video_path)
 
             tracker = PlayerTracker()
             event_detector = EventDetector()
 
+            processed_frames = 0
+
             for frame_number, minute, frame in processor.get_frames():
+
+                # 🔥 Limitar cantidad de frames en modo test
+                if MAX_FRAMES_TEST is not None and processed_frames >= MAX_FRAMES_TEST:
+                    break
+
+                # 🔥 Reducir resolución (GRAN impacto en CPU)
+                frame = cv2.resize(frame, (TARGET_WIDTH, TARGET_HEIGHT))
+
                 detections = detector.detect(frame)
                 objects, bboxes, teams = tracker.update(frame, detections)
-                
+
                 event_detector.detect_events(frame.shape, minute, bboxes, teams)
+
+                processed_frames += 1
 
             events.extend(event_detector.events_detected)
 
